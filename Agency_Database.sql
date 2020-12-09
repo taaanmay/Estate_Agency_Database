@@ -1,9 +1,14 @@
+Drop table Employee;
+Drop table Owner;
+Drop table Buyer;
+Drop table Branch;
 
-CREATE TABLE Branch
+
+CREATE TABLE Branch 
 (
   Branch_ID INT NOT NULL,
   Name CHAR(30) NOT NULL,
-  Phone_No INT NOT NULL,
+  Phone_No INT UNIQUE NOT NULL,
   Street_ CHAR(20),
   Town_ CHAR(20),
   County CHAR(20),
@@ -15,9 +20,7 @@ CREATE TABLE Branch
 Insert Into Branch Values(001, 'South Motors', 894111873, 'Honeypark', 'Dun Laoghaire', 'Dublin');
 Insert Into Branch Values(002, 'North Motors', 0894865585, 'Sword Centre', 'Sword', 'Dublin 9');
 Insert Into Branch Values(003, 'Car Trust Motors', 864222345, 'Naas Rd', 'Naas', 'Wicklow');
-/*
-Select * from branch;
-*/
+
 
 
 
@@ -47,16 +50,14 @@ INSERT INTO Employee VALUES( 0007, 'Tom', 'Shelby', 'Executive', 'Active', 3000,
 INSERT INTO Employee VALUES( 0008, 'Sherlock', 'Holmes', 'Executive', 'Active', 3200, 'K24651323', 003); 
 INSERT INTO Employee VALUES( 0009, 'Willy', 'Wonka', 'Manager', 'Active', 4200, 'A23451129', 001); 
 
-/*
-Select * from employee where emp_position = 'manager';
-*/
+
 
 CREATE TABLE Owner
 (
   Owner_ID INT NOT NULL,
   FName VARCHAR(20) NOT NULL,
   SName VARCHAR(20) NOT NULL,
-  Phone_No INT NOT NULL,
+  Phone_No INT UNIQUE NOT NULL,
   PRIMARY KEY (Owner_ID),
   CONSTRAINT check_Phone CHECK ( Phone_No < 10000000000 )
 );
@@ -71,9 +72,7 @@ INSERT INTO Owner VALUES( 006, 'Charles', 'Dickens', '892345679');
 INSERT INTO Owner VALUES( 007, 'Cody', 'Jones', '892345680');
 INSERT INTO Owner VALUES( 008, 'Andrew', 'Simon', '892345681');
 
-/*
-select * from owner
-*/
+
 
 CREATE TABLE Buyer
 (
@@ -88,6 +87,29 @@ CREATE TABLE Buyer
   CONSTRAINT check_Phone_No3 CHECK ( Phone_No < 10000000000 )
 );
 
+INSERT INTO Buyer VALUES( 001, 'Abhi', 'Kaush', 650000, '873345678', 5, 3);
+INSERT INTO Buyer VALUES( 002, 'Arthur', 'King', 560000, '873345679', NULL, NULL);
+INSERT INTO Buyer VALUES( 003, 'Elizabeth', 'Keene', NULL, '873345680',3, NULL);
+INSERT INTO Buyer VALUES( 004, 'Emma', 'Riley', 270000, '873345681', 1, 1);
+INSERT INTO Buyer VALUES( 005, 'Jackson', 'Stuart', 720000, '873345682', 3, 3);
+INSERT INTO Buyer VALUES( 006, 'Michael', 'Langford', NULL, '873345683', 3, NULL);
+INSERT INTO Buyer VALUES( 007, 'Kizzy', 'Giles', 480000, '873345684', NULL, NULL);
+INSERT INTO Buyer VALUES( 008, 'Marry', 'Joeseph', 550000, '873345685', 3, 2);
 
 
 
+/*
+Select * from branch;
+*/
+
+/*
+Select * from employee
+*/
+
+/*
+select * from owner
+*/
+
+/*
+select * from buyer
+*/
