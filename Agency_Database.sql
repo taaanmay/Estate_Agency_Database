@@ -1,13 +1,14 @@
+Drop table Features;
 Drop table Employee;
-Drop table Owner;
+Drop table Property;
 Drop table Buyer;
 Drop table Branch;
-Drop table Features;
+Drop table Owner;
 
 
 
 
-CREATE TABLE Branch 
+CREATE TABLE IF NOT EXISTS Branch
 (
   Branch_ID INT NOT NULL,
   Name CHAR(30) NOT NULL,
@@ -27,7 +28,7 @@ Insert Into Branch Values(003, 'Car Trust Motors', 864222345, 'Naas Rd', 'Naas',
 
 
 
-CREATE TABLE Employee
+CREATE TABLE IF NOT EXISTS Employee
 (
   Employee_ID INT NOT NULL,
   FName VARCHAR(20) NOT NULL,
@@ -55,7 +56,7 @@ INSERT INTO Employee VALUES( 0009, 'Willy', 'Wonka', 'Manager', 'Active', 4200, 
 
 
 
-CREATE TABLE Owner
+CREATE TABLE IF NOT EXISTS Owner
 (
   Owner_ID INT NOT NULL,
   FName VARCHAR(20) NOT NULL,
@@ -77,7 +78,7 @@ INSERT INTO Owner VALUES( 008, 'Andrew', 'Simon', '892345681');
 
 
 
-CREATE TABLE Buyer
+CREATE TABLE IF NOT EXISTS Buyer
 (
   Buyer_ID INT NOT NULL,
   FName VARCHAR(20) NOT NULL,
@@ -100,7 +101,7 @@ INSERT INTO Buyer VALUES( 007, 'Kizzy', 'Giles', 480000, '873345684', NULL, NULL
 INSERT INTO Buyer VALUES( 008, 'Marry', 'Joeseph', 550000, '873345685', 3, 2);
 
 
-CREATE TABLE Features
+CREATE TABLE IF NOT EXISTS Features
 (
   Feature_ID INT NOT NULL,
   Feat_Name  VARCHAR(30) NOT NULL,
@@ -113,6 +114,30 @@ INSERT INTO Features VALUES(002, 'Heated Seats', 'Car has heated seats at the fr
 INSERT INTO Features VALUES(003, 'Cruise Mode', NULL);
 INSERT INTO Features VALUES(004, 'Sun Roof', 'Car has an extended sun roof');
 INSERT INTO Features VALUES(005, 'Collision Detection', NULL);
+
+CREATE TABLE IF NOT EXISTS Property
+(
+  Property_ID INT NOT NULL,
+  Property_Status VARCHAR(20) NOT NULL,
+  Date_Updated DATE NOT NULL,
+  Street_ CHAR(20) NOT NULL,
+  Town_ CHAR(20) NOT NULL,
+  County CHAR(20) NOT NULL,
+  EIRCODE VARCHAR(7),
+  Bedroom INT,
+  Bathroom INT,
+  Area INT,
+  Property_Type VARCHAR(20) NOT NULL,
+  Owner_ID INT NOT NULL,
+  PRIMARY KEY (Property_ID),
+  FOREIGN KEY (Owner_ID) REFERENCES Owner(Owner_ID),
+  CONSTRAINT check_Property_Status CHECK(Property_Status = 'For Sale' OR Property_Status = 'Sale Agreed' OR Property_Status = 'Sold'),
+  CONSTRAINT check_EIRCODE CHECK(CHARACTER_LENGTH(EIRCODE) = 7 AND SUBSTRING(EIRCODE FROM 1 FOR 1) BETWEEN 'A' AND 'Z'),
+  CONSTRAINT check_Property_Type CHECK(Property_Type = 'House' OR Property_Type = 'Apartment' OR Property_Type = 'Bunglaw' OR Property_Type = 'Duplex' OR Property_Type = 'Cottage' OR Property_Type = 'Other')
+);
+
+
+INSERT INTO Property VALUES(001, 'For Sale', '2020-02-15', '23 Leona Apartment', 'Dun Laoghaire', 'Dublin', 'A86V6YB', 2, 2, 93, 'Apartment', 002); 
 
 /*
 Select * from branch;
@@ -133,4 +158,16 @@ select * from buyer
 /*
 select * from Features;
 */
+
+
+select * from Property;
+
+
+
+
+
+
+
+
+
 
