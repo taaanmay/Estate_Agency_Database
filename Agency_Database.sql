@@ -51,7 +51,29 @@ INSERT INTO Employee VALUES( 0009, 'Willy', 'Wonka', 'Manager', 'Active', 4200, 
 Select * from employee where emp_position = 'manager';
 */
 
+CREATE TABLE Owner
+(
+  Owner_ID INT NOT NULL,
+  FName VARCHAR(20) NOT NULL,
+  SName VARCHAR(20) NOT NULL,
+  Phone_No INT NOT NULL,
+  PRIMARY KEY (Owner_ID),
+  CONSTRAINT check_Phone CHECK ( Phone_No < 10000000000 )
+);
 
+
+INSERT INTO Owner VALUES( 001, 'Jude', 'Law', '862345678');
+INSERT INTO Owner VALUES( 002, 'Zach', 'Jones', '862345679');
+INSERT INTO Owner VALUES( 003, 'Cody', 'Jones', '862345680');
+INSERT INTO Owner VALUES( 004, 'Rick', 'Lax', '862345681');
+INSERT INTO Owner VALUES( 005, 'Rocky', 'Balboa', '892345678');
+INSERT INTO Owner VALUES( 006, 'Charles', 'Dickens', '892345679');
+INSERT INTO Owner VALUES( 007, 'Cody', 'Jones', '892345680');
+INSERT INTO Owner VALUES( 008, 'Andrew', 'Simon', '892345681');
+
+/*
+select * from owner
+*/
 
 
 
