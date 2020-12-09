@@ -29,7 +29,7 @@ CREATE TABLE Employee
   Emp_Position VARCHAR(20) NOT NULL,
   Emp_Status VARCHAR(20) NOT NULL,
   Salary INT NOT NULL,
-  PPS VARCHAR(9) NOT NULL,
+  PPS VARCHAR(9) UNIQUE NOT NULL,
   Branch_ID INT NOT NULL,
   PRIMARY KEY (Employee_ID),
   FOREIGN KEY (Branch_ID) REFERENCES Branch(Branch_ID),
@@ -37,7 +37,6 @@ CREATE TABLE Employee
   CONSTRAINT check_Position CHECK(Emp_Position = 'Manager' OR Emp_Position = 'Executive'),
   CONSTRAINT check_Status CHECK(Emp_Status = 'Active' OR Emp_Status = 'Inactive')
 );
-
 INSERT INTO Employee VALUES( 0001, 'Harry', 'Potter', 'Executive', 'Active', 3000, 'A23456789', 001); 
 INSERT INTO Employee VALUES( 0002, 'Ron', 'Weasley', 'Executive', 'Active', 2800, 'OA3456789', 002); 
 INSERT INTO Employee VALUES( 0003, 'Hermoine', 'Granger', 'Manager', 'Active', 4000, 'SB9876543', 002); 
