@@ -120,10 +120,11 @@ CREATE TABLE IF NOT EXISTS Property
   Property_ID INT NOT NULL,
   Property_Status VARCHAR(20) NOT NULL,
   Date_Updated DATE NOT NULL,
-  Street_ CHAR(20) NOT NULL,
+  Price INT NOT NULL,
+  Street_ CHAR(50) NOT NULL,
   Town_ CHAR(20) NOT NULL,
   County CHAR(20) NOT NULL,
-  EIRCODE VARCHAR(7),
+  EIRCODE VARCHAR(7) UNIQUE,
   Bedroom INT,
   Bathroom INT,
   Area INT,
@@ -137,7 +138,14 @@ CREATE TABLE IF NOT EXISTS Property
 );
 
 
-INSERT INTO Property VALUES(001, 'For Sale', '2020-02-15', '23 Leona Apartment', 'Dun Laoghaire', 'Dublin', 'A86V6YB', 2, 2, 93, 'Apartment', 002); 
+INSERT INTO Property VALUES(001, 'For Sale', '2020-02-15', 550000, '23 Leona Apartment', 'Dun Laoghaire', 'Dublin', 'A86V6YB', 2, 2, 93, 'Apartment', 002); 
+INSERT INTO Property VALUES(002, 'For Sale', '2020-03-1', 575000, '23 Cabinteeley Avenue', 'Cabinteeley', 'Dublin 8', 'H26L1A0', 4, 3, 164, 'House', 006); 
+INSERT INTO Property VALUES(003, 'For Sale', '2020-01-14', 300000, '1 Cube Apartments', 'Cabinteeley', 'Dublin 8', 'H26L3B1', 2, NULL, 72, 'Apartment', 005); 
+INSERT INTO Property VALUES(004, 'Sale Agreed', '2020-09-24', 480000, '15 Bluemoon Road', 'Celbridge', 'Kildare', 'M12H3R1', 3, 2, 120, 'Bunglaw', 008); 
+INSERT INTO Property VALUES(005, 'For Sale', '2019-12-01', 675000, '99 Carricmines Manor', 'Carrickmines', 'Dublin 18', 'G26K2P3', 5, 3, NULL, 'House', 004);
+INSERT INTO Property VALUES(006, 'Sale Agreed', '2020-7-17', 520000, '11 County Ridge', 'Portsmanrock', 'Dublin 5', 'N13H5G9', 3, 2, 115, 'Duplex', 003); 
+INSERT INTO Property VALUES(007, 'For Sale', '2020-09-21', 430000, '12 Willow Rose', 'Celbridge', 'Kildare', 'M12H4F2', 2, 3, 102, 'Duplex', 001); 
+INSERT INTO Property VALUES(008, 'Sale Agreed', '2020-04-19', 850000, 'Serena', 'Foxrock', 'Dublin', 'C23L9P1', 5, 4, 201, 'House', 007); 
 
 /*
 Select * from branch;
