@@ -75,6 +75,18 @@ INSERT INTO Owner VALUES( 008, 'Andrew', 'Simon', '892345681');
 select * from owner
 */
 
+CREATE TABLE Buyer
+(
+  Buyer_ID INT NOT NULL,
+  FName VARCHAR(20) NOT NULL,
+  SName VARCHAR(20) NOT NULL,
+  Budget INT,
+  Phone_No INT UNIQUE NOT NULL,
+  Bed_Requirement INT,
+  Bath_Requiremen INT,
+  PRIMARY KEY (Buyer_ID),
+  CONSTRAINT check_Phone_No3 CHECK ( Phone_No < 10000000000 )
+);
 
 
 
