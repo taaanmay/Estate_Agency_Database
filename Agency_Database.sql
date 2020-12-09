@@ -2,6 +2,9 @@ Drop table Employee;
 Drop table Owner;
 Drop table Buyer;
 Drop table Branch;
+Drop table Features;
+
+
 
 
 CREATE TABLE Branch 
@@ -97,6 +100,19 @@ INSERT INTO Buyer VALUES( 007, 'Kizzy', 'Giles', 480000, '873345684', NULL, NULL
 INSERT INTO Buyer VALUES( 008, 'Marry', 'Joeseph', 550000, '873345685', 3, 2);
 
 
+CREATE TABLE Features
+(
+  Feature_ID INT NOT NULL,
+  Feat_Name  VARCHAR(30) NOT NULL,
+  Feat_Description VARCHAR(50),
+  PRIMARY KEY (Feature_ID)
+);
+
+INSERT INTO Features VALUES(001, 'Reverse Camera', 'Reverse Camera present at the back of the car');
+INSERT INTO Features VALUES(002, 'Heated Seats', 'Car has heated seats at the front');
+INSERT INTO Features VALUES(003, 'Cruise Mode', NULL);
+INSERT INTO Features VALUES(004, 'Sun Roof', 'Car has an extended sun roof');
+INSERT INTO Features VALUES(005, 'Collision Detection', NULL);
 
 /*
 Select * from branch;
@@ -113,3 +129,8 @@ select * from owner
 /*
 select * from buyer
 */
+
+/*
+select * from Features;
+*/
+
