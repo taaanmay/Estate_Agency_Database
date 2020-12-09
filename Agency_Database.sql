@@ -20,7 +20,6 @@ Select * from branch;
 
 
 
-
 CREATE TABLE Employee
 (
   Employee_ID INT NOT NULL,
@@ -33,5 +32,9 @@ CREATE TABLE Employee
   Branch_ID INT NOT NULL,
   PRIMARY KEY (Employee_ID),
   FOREIGN KEY (Branch_ID) REFERENCES Branch(Branch_ID),
-  CONSTRAINT Employee CHECK(CHARACTER_LENGTH(PPS) = 9 AND SUBSTRING(PPS FROM 1 FOR 1) BETWEEN 'A' AND 'Z')
+  CONSTRAINT check_PPS CHECK(CHARACTER_LENGTH(PPS) = 9 AND SUBSTRING(PPS FROM 1 FOR 1) BETWEEN 'A' AND 'Z'),
+  CONSTRAINT check_Position CHECK(Emp_Position = 'Manager' OR Emp_Position = 'Executive'),
+  CONSTRAINT check_Status CHECK(Emp_Status = 'Active' OR Emp_Status = 'Inactive')
 );
+
+INSERT INTO Employee VALUES( 0001, 'Harry', 'Potter', 'Executive', 'Active', 3000, 'A23456789', 001); 
