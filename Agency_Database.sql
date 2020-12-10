@@ -5,7 +5,7 @@ USE Estate_Agency;
 
 	CREATE TABLE IF NOT EXISTS Branch
 	(
-	  Branch_ID INT NOT NULL,
+	  Branch_ID INT NOT NULL AUTO_INCREMENT,
 	  Name CHAR(30) NOT NULL,
 	  Phone_No INT  NOT NULL,
 	  Street CHAR(20),
@@ -25,7 +25,7 @@ USE Estate_Agency;
 
 	CREATE TABLE IF NOT EXISTS Employee
 	(
-	  Employee_ID INT NOT NULL,
+	  Employee_ID INT NOT NULL AUTO_INCREMENT,
 	  FName VARCHAR(20) NOT NULL,
 	  SName VARCHAR(20) NOT NULL,
 	  Emp_Position VARCHAR(20) NOT NULL,
@@ -78,7 +78,7 @@ USE Estate_Agency;
 
 	CREATE TABLE IF NOT EXISTS Buyer
 	(
-	  Buyer_ID INT NOT NULL,
+	  Buyer_ID INT NOT NULL AUTO_INCREMENT,
 	  FName VARCHAR(20) NOT NULL,
 	  SName VARCHAR(20) NOT NULL,
 	  Budget INT,
@@ -103,7 +103,7 @@ USE Estate_Agency;
 
 	CREATE TABLE IF NOT EXISTS Features
 	(
-	  Feature_ID INT NOT NULL,
+	  Feature_ID INT NOT NULL AUTO_INCREMENT,
 	  Feat_Name  VARCHAR(60) NOT NULL,
 	  Feat_Description VARCHAR(255),
 	  PRIMARY KEY (Feature_ID)
@@ -119,7 +119,7 @@ USE Estate_Agency;
 
 	CREATE TABLE IF NOT EXISTS Property
 	(
-	  Property_ID INT NOT NULL,
+	  Property_ID INT NOT NULL AUTO_INCREMENT,
 	  Property_Status VARCHAR(20) NOT NULL,
 	  Date_Updated DATE NOT NULL,
 	  Price INT NOT NULL,
@@ -136,14 +136,14 @@ USE Estate_Agency;
 	  FOREIGN KEY (Owner_ID) REFERENCES Owner(Owner_ID),
 	  CONSTRAINT check_Property_Status CHECK(Property_Status = 'For Sale' OR Property_Status = 'Sale Agreed' OR Property_Status = 'Sold'),
 	  CONSTRAINT check_EIRCODE CHECK(CHARACTER_LENGTH(EIRCODE) = 7 AND SUBSTRING(EIRCODE FROM 1 FOR 1) BETWEEN 'A' AND 'Z'),
-	  CONSTRAINT check_Property_Type CHECK(Property_Type IN( 'House','Apartment', 'Bunglaw', 'Duplex','Cottage', 'Other'))
+	  CONSTRAINT check_Property_Type CHECK(Property_Type IN ( 'House','Apartment', 'Bungalow', 'Duplex','Cottage', 'Other'))
 	);
 
 
 	INSERT INTO Property VALUES(001, 'For Sale', '2020-02-15', 550000, '23 Leona Apartment', 'Dun Laoghaire', 'Dublin', 'A86V6YB', 2, 2, 93, 'Apartment', 002); 
 	INSERT INTO Property VALUES(002, 'For Sale', '2020-03-1', 575000, '23 Cabinteeley Avenue', 'Cabinteeley', 'Dublin 8', 'H26L1A0', 4, 3, 164, 'House', 006); 
 	INSERT INTO Property VALUES(003, 'For Sale', '2020-01-14', 300000, '1 Cube Apartments', 'Cabinteeley', 'Dublin 8', 'H26L3B1', 2, NULL, 72, 'Apartment', 005); 
-	INSERT INTO Property VALUES(004, 'Sale Agreed', '2020-09-24', 480000, '15 Bluemoon Road', 'Celbridge', 'Kildare', 'M12H3R1', 3, 2, 120, 'Bunglaw', 008); 
+	INSERT INTO Property VALUES(004, 'Sale Agreed', '2020-09-24', 480000, '15 Bluemoon Road', 'Celbridge', 'Kildare', 'M12H3R1', 3, 2, 120, 'Bungalow', 008); 
 	INSERT INTO Property VALUES(005, 'For Sale', '2019-12-01', 675000, '99 Carricmines Manor', 'Carrickmines', 'Dublin 18', 'G26K2P3', 5, 3, NULL, 'House', 004);
 	INSERT INTO Property VALUES(006, 'Sale Agreed', '2020-7-17', 520000, '11 County Ridge', 'Portsmanrock', 'Dublin 5', 'N13H5G9', 3, 2, 115, 'Duplex', 003); 
 	INSERT INTO Property VALUES(007, 'For Sale', '2020-09-21', 430000, '12 Willow Rose', 'Celbridge', 'Kildare', 'M12H4F2', 2, 3, 102, 'Duplex', 001); 
@@ -158,7 +158,7 @@ SELECT Property.Property_ID, Property.Street, Property.Price, Owner.FName, Owner
 
     CREATE TABLE IF NOT EXISTS Viewing
 	(
-	  Viewing_ID INT NOT NULL,
+	  Viewing_ID INT NOT NULL AUTO_INCREMENT,
 	  Viewing_Time TIME(2) NOT NULL,
 	  Viewing_Date DATE NOT NULL,
 	  Employee_ID INT NOT NULL,
@@ -189,7 +189,7 @@ SELECT Property.Property_ID, Property.Street, Property.Price, Owner.FName, Owner
    
 CREATE TABLE Sale_Record
 (
-  Sale_Records_ID INT NOT NULL,
+  Sale_Records_ID INT NOT NULL AUTO_INCREMENT,
   Sale_Date DATE NOT NULL,
   Sale_Price INT NOT NULL,
   Branch_ID INT NOT NULL,
@@ -206,18 +206,6 @@ CREATE TABLE Sale_Record
 );
 
 /* SELECT * FROM Sale_Record; */
-
--- Update_Property_Details TRIGGER is used to change the status of Property from Sale Agreed to Sold when the propery is entered into 
--- the Sale_Record table and update the Price of the property. 
-/*
-CREATE TRIGGER Update_Property_Details
-AFTER INSERT ON Sale_Record FOR EACH ROW
-	UPDATE Property 
-     SET Property.Property_Status = 'Sold', Property.Price = New.Sale_Price
-    WHERE New.Property_ID = Property.Property_ID; 
-	INSERT INTO Owner(Owner_ID, FName, SName, Phone_No) select NULL, Buyer.FName, Buyer.SName, Buyer.Phone_No from Buyer where Buyer.Buyer_ID = NEW.Buyer_ID;
-*/	
-    -- INSERT INTO Owner SELECT (NULL, FName, SName, Phone_No) where Buyer.Buyer_ID = NEW.Buyer_ID;
 
 CREATE TABLE Commission
 (
