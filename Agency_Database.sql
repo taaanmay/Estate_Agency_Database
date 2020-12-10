@@ -222,10 +222,16 @@ DELIMITER $$
 CREATE TRIGGER Update_Property_Details
 AFTER INSERT ON Sale_Record FOR EACH ROW
 begin
+	DECLARE New_Owner varchar(50);
+    -- Creating Buyer into a New Owner
+    INSERT INTO Owner(Owner_ID, FName, SName, Phone_No) select NULL, Buyer.FName, Buyer.SName, Buyer.Phone_No from Buyer where Buyer.Buyer_ID = NEW.Buyer_ID;
+     
+     Select Max(Owner_ID) from Owner into New_Owner;
+     -- Satus to Sold and Price to Sale Price
        UPDATE Property 
-     SET Property.Property_Status = 'Sold', Property.Price = New.Sale_Price
+     SET Property.Property_Status = 'Sold', Property.Price = New.Sale_Price, Property.Owner_ID = New_Owner
     WHERE New.Property_ID = Property.Property_ID; 
-	INSERT INTO Owner(Owner_ID, FName, SName, Phone_No) select NULL, Buyer.FName, Buyer.SName, Buyer.Phone_No from Buyer where Buyer.Buyer_ID = NEW.Buyer_ID;
+	
 	
 END;
 $$
@@ -235,7 +241,8 @@ DELIMITER ;
 INSERT INTO Sale_Record VALUES(001, '2020-09-24', 485000, 003, 004,006,005, 008);
 INSERT INTO Sale_Record VALUES(002, '2020-07-17', 535000, 002, 006, 001, 004, 003);
 INSERT INTO Sale_Record VALUES(003, '2020-04-19', 845000, 001, 008, 003, 001, 007); 
-   
+
+select * from Property;   
  
 
 
