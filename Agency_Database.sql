@@ -7,7 +7,7 @@ USE Estate_Agency;
 	(
 	  Branch_ID INT NOT NULL,
 	  Name CHAR(30) NOT NULL,
-	  Phone_No INT UNIQUE NOT NULL,
+	  Phone_No INT  NOT NULL,
 	  Street CHAR(20),
 	  Town CHAR(20),
 	  County CHAR(20),
@@ -37,7 +37,8 @@ USE Estate_Agency;
 	  FOREIGN KEY (Branch_ID) REFERENCES Branch(Branch_ID),
 	  CONSTRAINT check_PPS CHECK(CHARACTER_LENGTH(PPS) = 9 AND SUBSTRING(PPS FROM 1 FOR 1) BETWEEN 'A' AND 'Z'),
 	  CONSTRAINT check_Position CHECK(Emp_Position = 'Manager' OR Emp_Position = 'Executive'),
-	  CONSTRAINT check_Status CHECK(Emp_Status = 'Active' OR Emp_Status = 'Inactive')
+	  CONSTRAINT check_Status CHECK(Emp_Status IN ('Active','Inactive'))
+      -- CONSTRAINT check_Status CHECK(Emp_Status = 'Active' OR Emp_Status = 'Inactive')
 	);
 	INSERT INTO Employee VALUES( 0001, 'Harry', 'Potter', 'Executive', 'Active', 3000, 'A23456789', 001); 
 	INSERT INTO Employee VALUES( 0002, 'Ron', 'Weasley', 'Executive', 'Active', 2800, 'OA3456789', 002); 
@@ -56,7 +57,7 @@ USE Estate_Agency;
 	  Owner_ID INT NOT NULL auto_increment,
 	  FName VARCHAR(20) NOT NULL,
 	  SName VARCHAR(20) NOT NULL,
-	  Phone_No INT UNIQUE NOT NULL,
+	  Phone_No INT  NOT NULL,
       Email varchar(50),
 	  PRIMARY KEY (Owner_ID),
 	  CONSTRAINT check_Phone CHECK ( Phone_No < 10000000000 ),
@@ -81,7 +82,7 @@ USE Estate_Agency;
 	  FName VARCHAR(20) NOT NULL,
 	  SName VARCHAR(20) NOT NULL,
 	  Budget INT,
-	  Phone_No INT UNIQUE NOT NULL,
+	  Phone_No INT  NOT NULL,
 	  Bed_Requirement INT,
 	  Bath_Requiremen INT,
 	  PRIMARY KEY (Buyer_ID),
@@ -103,8 +104,8 @@ USE Estate_Agency;
 	CREATE TABLE IF NOT EXISTS Features
 	(
 	  Feature_ID INT NOT NULL,
-	  Feat_Name  VARCHAR(30) NOT NULL,
-	  Feat_Description VARCHAR(60),
+	  Feat_Name  VARCHAR(60) NOT NULL,
+	  Feat_Description VARCHAR(255),
 	  PRIMARY KEY (Feature_ID)
 	);
 
@@ -135,7 +136,7 @@ USE Estate_Agency;
 	  FOREIGN KEY (Owner_ID) REFERENCES Owner(Owner_ID),
 	  CONSTRAINT check_Property_Status CHECK(Property_Status = 'For Sale' OR Property_Status = 'Sale Agreed' OR Property_Status = 'Sold'),
 	  CONSTRAINT check_EIRCODE CHECK(CHARACTER_LENGTH(EIRCODE) = 7 AND SUBSTRING(EIRCODE FROM 1 FOR 1) BETWEEN 'A' AND 'Z'),
-	  CONSTRAINT check_Property_Type CHECK(Property_Type = 'House' OR Property_Type = 'Apartment' OR Property_Type = 'Bunglaw' OR Property_Type = 'Duplex' OR Property_Type = 'Cottage' OR Property_Type = 'Other')
+	  CONSTRAINT check_Property_Type CHECK(Property_Type IN( 'House','Apartment', 'Bunglaw', 'Duplex','Cottage', 'Other'))
 	);
 
 
@@ -230,7 +231,7 @@ CREATE TABLE Commission
 
 /* SELECT * FROM Commission; */
 
-
+-- 2 TRIGGERS
 DELIMITER $$
 CREATE TRIGGER Update_Property_Details
 AFTER INSERT ON Sale_Record FOR EACH ROW
@@ -302,6 +303,7 @@ INSERT INTO Property_Features VALUES(008, 002);
 INSERT INTO Property_Features VALUES(008, 003);
 INSERT INTO Property_Features VALUES(008, 005);
 
+
 /* Select * From Property_Features; */
 /*
 select distinct Property.Street, Features.Feat_Name from Property, Features, Property_Features where Features.Feat_Name = 'Parking Space' ;
@@ -360,5 +362,19 @@ CREATE VIEW Empoyee_Commission_Record AS
 -- Trigger 2: When status of the property is changed to Sold, bring the most recent sale record, then commission by taking employee number, 
 -- House Price Update and
 -- Owner of the house changed to buyer: by first copying the buyer details to owner table and put the new Owner ID in Property table.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
