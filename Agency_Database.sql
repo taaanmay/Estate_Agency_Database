@@ -3,19 +3,6 @@ Drop Database Estate_Agency;
 CREATE DATABASE Estate_Agency;
 USE Estate_Agency;
 
-	/* To do - 
-    Add trigger for Sale Record. No entry yet.
-    
-    Drop table Sale_Record;
-    Drop table Viewing;
-    Drop table Property;
-    Drop table Buyer;
-	Drop table Features;
-    Drop table Employee;
-    Drop table Branch;
-    Drop table Owner;
-    */
-
 	CREATE TABLE IF NOT EXISTS Branch
 	(
 	  Branch_ID INT NOT NULL,
@@ -161,12 +148,14 @@ USE Estate_Agency;
 	INSERT INTO Property VALUES(007, 'For Sale', '2020-09-21', 430000, '12 Willow Rose', 'Celbridge', 'Kildare', 'M12H4F2', 2, 3, 102, 'Duplex', 001); 
 	INSERT INTO Property VALUES(008, 'Sale Agreed', '2020-04-19', 850000, 'Serena Estate', 'Foxrock', 'Dublin', 'C23L9P1', 5, 4, 201, 'House', 007); 
 
+
 /* SELECT * FROM Property; */
 /*
 (Prints Property ID, Street, Price, Owner Name)
 SELECT Property.Property_ID, Property.Street, Property.Price, Owner.FName, Owner.SName FROM Property, Owner where Property.Owner_ID = Owner.Owner_ID;
 */
-	CREATE TABLE IF NOT EXISTS Viewing
+
+    CREATE TABLE IF NOT EXISTS Viewing
 	(
 	  Viewing_ID INT NOT NULL,
 	  Viewing_Time TIME(2) NOT NULL,
@@ -197,8 +186,6 @@ SELECT Property.Property_ID, Property.Street, Property.Price, Owner.FName, Owner
     select property_id, Property.owner_id, Owner.FName, date_updated, Property_Status from Property, Owner where Property_Status = 'Sale Agreed' AND Owner.Owner_ID = Property.Owner_ID;
  */
    
- 
-    
 CREATE TABLE Sale_Record
 (
   Sale_Records_ID INT NOT NULL,
@@ -217,30 +204,37 @@ CREATE TABLE Sale_Record
   FOREIGN KEY (Owner_ID) REFERENCES Owner(Owner_ID)
 );
 
-/* Add triggeres - 
-1. When new insert in Sale_Record, go to Property table and update its status from For Sale to Sale_Agreed. 
-2. When status of the property is changed to Sold, bring the most recent sale record, then commission by taking employee number, 
-    House Price Update and Owner of the house changed to buyer: by first copying the buyer details to owner table and put the new Owner ID in Property table.
- */   
-	/*
-	Implement Triggers First  - 
+/* SELECT * FROM Sale_Record; */
+
+-- Update_Property_Status TRIGGER is used to change the status of Property from Sale Agreed to Sold when the propery is entered into 
+-- the Sale_Record table and update the Price of the property. 
+
+CREATE TRIGGER Update_Property_Status
+AFTER INSERT ON Sale_Record FOR EACH ROW
+	UPDATE Property 
+     SET Property.Property_Status = 'Sold', Property.Price = New.Sale_Price
+    WHERE New.Property_ID = Property.Property_ID; 
 	
-    INSERT INTO Sale_Record VALUES(001, '2020-09-24', 485000, 003, 004,006,005, 008);
-    INSERT INTO Sale_Record VALUES(002, '2020-07-17', 535000, 002, 006, 001, 004, 003);
-    INSERT INTO Sale_Record VALUES(003, '2020-04-19', 845000, 001, 008, 003, 001, 007); 
+	
+	
+INSERT INTO Sale_Record VALUES(001, '2020-09-24', 485000, 003, 004,006,005, 008);
+INSERT INTO Sale_Record VALUES(002, '2020-07-17', 535000, 002, 006, 001, 004, 003);
+INSERT INTO Sale_Record VALUES(003, '2020-04-19', 845000, 001, 008, 003, 001, 007); 
    
-   */  
+     
 
 
 CREATE TABLE Commission
 (
-  Commission_ID INT NOT NULL,
+  Commission_ID INT NOT NULL AUTO_INCREMENT,
   Commission_Date DATE NOT NULL,
   Amount INT NOT NULL,
   Sale_Records_ID INT NOT NULL,
   PRIMARY KEY (Commission_ID),
   FOREIGN KEY (Sale_Records_ID) REFERENCES Sale_Record(Sale_Records_ID)
 );
+
+/* SELECT * FROM Commission; */
 
 CREATE TABLE Property_Features
 (
@@ -254,46 +248,72 @@ CREATE TABLE Property_Features
 INSERT INTO Property_Features VALUES(001, 001);
 INSERT INTO Property_Features VALUES(001, 003);
 INSERT INTO Property_Features VALUES(001, 005);
-
 INSERT INTO Property_Features VALUES(002, 001);
 INSERT INTO Property_Features VALUES(002, 002);
 INSERT INTO Property_Features VALUES(002, 003);
-
 INSERT INTO Property_Features VALUES(003, 005);
-
-
 INSERT INTO Property_Features VALUES(004, 003);
 INSERT INTO Property_Features VALUES(004, 005);
-
 INSERT INTO Property_Features VALUES(005, 001);
 INSERT INTO Property_Features VALUES(005, 002);
 INSERT INTO Property_Features VALUES(005, 003);
 INSERT INTO Property_Features VALUES(005, 004);
 INSERT INTO Property_Features VALUES(005, 005);
-
 INSERT INTO Property_Features VALUES(006, 004);
 INSERT INTO Property_Features VALUES(006, 005);
-
 INSERT INTO Property_Features VALUES(007, 001);
 INSERT INTO Property_Features VALUES(007, 003);
 INSERT INTO Property_Features VALUES(007, 005);
-
 INSERT INTO Property_Features VALUES(008, 001);
 INSERT INTO Property_Features VALUES(008, 002);
 INSERT INTO Property_Features VALUES(008, 003);
 INSERT INTO Property_Features VALUES(008, 005);
 
+/* Select * From Property_Features; */
 /*
 select distinct Property.Street, Features.Feat_Name from Property, Features, Property_Features where Features.Feat_Name = 'Parking Space' ;
 */
 
 
 
-/* VIEW CREATED */
-CREATE VIEW Viewing_List AS ( 
-SELECT Viewing.Viewing_ID, Property.Street as Address, Property.Price,  Buyer.FName as Visitor_FName, Buyer.SName as Visitor_SName, 
-Viewing.Viewing_Date as Viewing_Date, Viewing.Viewing_Time,Employee.FName as Employee_FName, Employee.SName as Employee_SName 
-FROM Viewing, Property, Employee, Buyer
-WHERE Viewing.Buyer_ID = Buyer.Buyer_ID AND Viewing.Employee_ID = Employee.Employee_ID AND Viewing.Property_ID = Property.Property_ID);
 
-/* SELECT * FROM Viewing_List  ; */
+
+/* VIEW CREATED */
+CREATE VIEW Viewing_List AS
+    (SELECT 
+        Viewing.Viewing_ID,
+        Property.Street AS Address,
+        Property.Price,
+        Buyer.FName AS Visitor_FName,
+        Buyer.SName AS Visitor_SName,
+        Viewing.Viewing_Date AS Viewing_Date,
+        Viewing.Viewing_Time,
+        Employee.FName AS Employee_FName,
+        Employee.SName AS Employee_SName
+    FROM
+        Viewing,
+        Property,
+        Employee,
+        Buyer
+    WHERE
+        Viewing.Buyer_ID = Buyer.Buyer_ID
+            AND Viewing.Employee_ID = Employee.Employee_ID
+            AND Viewing.Property_ID = Property.Property_ID);
+
+
+-- Trigger 1: When new insert in Sale_Record, go to Property table and update its status from For Sale to Sale_Agreed.
+-- Trigger 2: When status of the property is changed to Sold, bring the most recent sale record, then commission by taking employee number, 
+-- House Price Update and
+-- Owner of the house changed to buyer: by first copying the buyer details to owner table and put the new Owner ID in Property table.
+
+
+
+
+
+select * from Property;
+
+
+
+
+
+
