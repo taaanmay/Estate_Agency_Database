@@ -21,8 +21,6 @@ USE Estate_Agency;
 	Insert Into Branch Values(003, 'Casa Hunt Citywest', 864222345, 'Naas Rd', 'Naas', 'Wicklow');
 
 
-/* SELECT * FROM BRANCH; */
-
 	CREATE TABLE IF NOT EXISTS Employee
 	(
 	  Employee_ID INT NOT NULL AUTO_INCREMENT,
@@ -38,7 +36,6 @@ USE Estate_Agency;
 	  CONSTRAINT check_PPS CHECK(CHARACTER_LENGTH(PPS) = 9 AND SUBSTRING(PPS FROM 1 FOR 1) BETWEEN 'A' AND 'Z'),
 	  CONSTRAINT check_Position CHECK(Emp_Position = 'Manager' OR Emp_Position = 'Executive'),
 	  CONSTRAINT check_Status CHECK(Emp_Status IN ('Active','Inactive'))
-      -- CONSTRAINT check_Status CHECK(Emp_Status = 'Active' OR Emp_Status = 'Inactive')
 	);
 	INSERT INTO Employee VALUES( 0001, 'Harry', 'Potter', 'Executive', 'Active', 3000, 'A23456789', 001); 
 	INSERT INTO Employee VALUES( 0002, 'Ron', 'Weasley', 'Executive', 'Active', 2800, 'OA3456789', 002); 
@@ -50,7 +47,7 @@ USE Estate_Agency;
 	INSERT INTO Employee VALUES( 0008, 'Sherlock', 'Holmes', 'Executive', 'Active', 3200, 'K24651323', 003); 
 	INSERT INTO Employee VALUES( 0009, 'Willy', 'Wonka', 'Manager', 'Active', 4200, 'A23451129', 001); 
 
-/* SELECT * FROM Employee; */
+ 
 
 	CREATE TABLE IF NOT EXISTS Owner
 	(
@@ -74,7 +71,6 @@ USE Estate_Agency;
 	INSERT INTO Owner VALUES( 007, 'Samuel', 'Dempsey', '892345680', 'iamsamuel@gmail.com');
 	INSERT INTO Owner VALUES( 008, 'Andrew', 'Simon', '892345681','simona@yahoo.com');
 
-/* SELECT * FROM OWNER; */
 
 	CREATE TABLE IF NOT EXISTS Buyer
 	(
@@ -98,7 +94,6 @@ USE Estate_Agency;
 	INSERT INTO Buyer VALUES( 007, 'Kizzy', 'Giles', 480000, '873345684', NULL, NULL);
 	INSERT INTO Buyer VALUES( 008, 'Marry', 'Joeseph', 550000, '873345685', 3, 2);
 
-/* SELECT * FROM Buyer; */
 
 
 	CREATE TABLE IF NOT EXISTS Features
@@ -115,7 +110,6 @@ USE Estate_Agency;
 	INSERT INTO Features VALUES(004, 'Solar Panel', 'House has Solar Panels');
 	INSERT INTO Features VALUES(005, 'Alarm System', NULL);
 
-/* SELECT * FROM FEATURES; */
 
 	CREATE TABLE IF NOT EXISTS Property
 	(
@@ -150,7 +144,6 @@ USE Estate_Agency;
 	INSERT INTO Property VALUES(008, 'Sale Agreed', '2020-04-19', 850000, 'Serena Estate', 'Foxrock', 'Dublin', 'C23L9P1', 5, 4, 201, 'House', 007); 
 
 
-/* SELECT * FROM Property; */
 /*
 (Prints Property ID, Street, Price, Owner Name)
 SELECT Property.Property_ID, Property.Street, Property.Price, Owner.FName, Owner.SName FROM Property, Owner where Property.Owner_ID = Owner.Owner_ID;
@@ -178,8 +171,7 @@ SELECT Property.Property_ID, Property.Street, Property.Price, Owner.FName, Owner
     INSERT INTO Viewing VALUES (006,'09:45', '2020-08-08', 006, 005, 005);
     INSERT INTO Viewing VALUES (007,'16:00', '2020-07-12', 004, 006, 001);
     INSERT INTO Viewing VALUES (008,'12:30', '2020-03-30', 001, 008, 003);
- 
-/* SELECT * FROM Viewing; */
+
 
 
  /*
@@ -205,7 +197,7 @@ CREATE TABLE Sale_Record
   FOREIGN KEY (Owner_ID) REFERENCES Owner(Owner_ID)
 );
 
-/* SELECT * FROM Sale_Record; */
+
 
 CREATE TABLE Commission
 (
@@ -217,7 +209,7 @@ CREATE TABLE Commission
   FOREIGN KEY (Sale_Records_ID) REFERENCES Sale_Record(Sale_Records_ID)
 );
 
-/* SELECT * FROM Commission; */
+
 
 
 CREATE TABLE Property_Features
@@ -254,10 +246,8 @@ INSERT INTO Property_Features VALUES(008, 003);
 INSERT INTO Property_Features VALUES(008, 005);
 
 
-/* Select * From Property_Features; */
-/*
-select distinct Property.Street, Features.Feat_Name from Property, Features, Property_Features where Features.Feat_Name = 'Parking Space' ;
-*/
+-- select distinct Property.Street, Features.Feat_Name from Property, Features, Property_Features where Features.Feat_Name = 'Parking Space' ;
+
 
 
 -- 2 TRIGGERS
@@ -271,7 +261,7 @@ begin
     
     -- Tagging the new Owner as the Owner of the property
      Select Max(Owner_ID) from Owner into New_Owner;
-     -- Satus to Sold and Price to Sale Price
+     -- Status to Sold and Price to Sale Price
        UPDATE Property 
      SET Property.Property_Status = 'Sold', Property.Price = New.Sale_Price, Property.Owner_ID = New_Owner, Property.Date_Updated = New.Sale_Date
     WHERE New.Property_ID = Property.Property_ID; 
@@ -289,18 +279,14 @@ END;
 $$
 DELIMITER ;
 
+ 
 
 -- These Values result into Sale of 3 Houses	
 INSERT INTO Sale_Record VALUES(001, '2020-09-24', 485000, 003, 004,006,005, 008);
 INSERT INTO Sale_Record VALUES(002, '2020-07-17', 535000, 002, 006, 001, 004, 003);
 INSERT INTO Sale_Record VALUES(003, '2020-04-19', 845000, 001, 008, 003, 001, 007); 
  
-
-
-
-
-
-
+ 
 -- SECURITY and VIEWS
 /* 3 VIEWS CREATED */
 CREATE VIEW Viewing_List AS
@@ -373,6 +359,21 @@ GRANT ALL ON Active_Employee_Database TO MANAGER WITH GRANT OPTION;
 
 GRANT INSERT, SELECT, UPDATE ON Viewing_List TO EXECUTIVE;
 GRANT SELECT, UPDATE ON Active_Employee_Database TO EXECUTIVE;
+
+-- Test Tables :
+
+-- SELECT * FROM Branch;
+-- SELECT * FROM Employee; 
+-- SELECT * FROM OWNER; 
+-- SELECT * FROM Buyer; 
+-- SELECT * FROM FEATURES; 
+-- SELECT * FROM Property;  
+-- SELECT * FROM Viewing; 
+-- Select * From Property_Features; 
+-- SELECT * FROM Sale_Record; 
+-- SELECT * FROM Commission; 
+
+-- Test Views :
 
 -- SELECT * From Viewing_List;
 -- SELECT * From Empoyee_Commission_Record;
