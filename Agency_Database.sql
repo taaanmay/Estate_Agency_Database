@@ -352,11 +352,13 @@ CREATE VIEW Active_Employee_Database AS
         Employee.Employee_ID,
         Employee.FName AS Employee_FName,
         Employee.SName AS Employee_SName,
-        Emp_Position AS Position
+        Emp_Position AS Position,
+        Branch.Name AS Branch_Name,
+        Branch.Phone_No AS Branch_Phone_No
     FROM
-        Employee
+        Employee, Branch
     WHERE
-        Employee.Emp_Status = 'Active';
+        Employee.Emp_Status = 'Active' AND Branch.Branch_ID = Employee.Branch_ID;
  
  
 
