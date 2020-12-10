@@ -53,7 +53,7 @@ USE Estate_Agency;
 
 	CREATE TABLE IF NOT EXISTS Owner
 	(
-	  Owner_ID INT NOT NULL,
+	  Owner_ID INT NOT NULL auto_increment,
 	  FName VARCHAR(20) NOT NULL,
 	  SName VARCHAR(20) NOT NULL,
 	  Phone_No INT UNIQUE NOT NULL,
@@ -206,22 +206,37 @@ CREATE TABLE Sale_Record
 
 /* SELECT * FROM Sale_Record; */
 
--- Update_Property_Status TRIGGER is used to change the status of Property from Sale Agreed to Sold when the propery is entered into 
+-- Update_Property_Details TRIGGER is used to change the status of Property from Sale Agreed to Sold when the propery is entered into 
 -- the Sale_Record table and update the Price of the property. 
-
-CREATE TRIGGER Update_Property_Status
+/*
+CREATE TRIGGER Update_Property_Details
 AFTER INSERT ON Sale_Record FOR EACH ROW
 	UPDATE Property 
      SET Property.Property_Status = 'Sold', Property.Price = New.Sale_Price
     WHERE New.Property_ID = Property.Property_ID; 
+	INSERT INTO Owner(Owner_ID, FName, SName, Phone_No) select NULL, Buyer.FName, Buyer.SName, Buyer.Phone_No from Buyer where Buyer.Buyer_ID = NEW.Buyer_ID;
+*/	
+    -- INSERT INTO Owner SELECT (NULL, FName, SName, Phone_No) where Buyer.Buyer_ID = NEW.Buyer_ID;
+
+DELIMITER $$
+CREATE TRIGGER Update_Property_Details
+AFTER INSERT ON Sale_Record FOR EACH ROW
+begin
+       UPDATE Property 
+     SET Property.Property_Status = 'Sold', Property.Price = New.Sale_Price
+    WHERE New.Property_ID = Property.Property_ID; 
+	INSERT INTO Owner(Owner_ID, FName, SName, Phone_No) select NULL, Buyer.FName, Buyer.SName, Buyer.Phone_No from Buyer where Buyer.Buyer_ID = NEW.Buyer_ID;
 	
-	
+END;
+$$
+DELIMITER ;
+
 	
 INSERT INTO Sale_Record VALUES(001, '2020-09-24', 485000, 003, 004,006,005, 008);
 INSERT INTO Sale_Record VALUES(002, '2020-07-17', 535000, 002, 006, 001, 004, 003);
 INSERT INTO Sale_Record VALUES(003, '2020-04-19', 845000, 001, 008, 003, 001, 007); 
    
-     
+ 
 
 
 CREATE TABLE Commission
@@ -309,8 +324,7 @@ CREATE VIEW Viewing_List AS
 
 
 
-
-select * from Property;
+-- select * from Property;
 
 
 
