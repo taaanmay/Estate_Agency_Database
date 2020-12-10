@@ -221,12 +221,10 @@ AFTER INSERT ON Sale_Record FOR EACH ROW
 CREATE TABLE Commission
 (
   Commission_ID INT NOT NULL AUTO_INCREMENT,
-  Employee_ID INT NOT NULL,
   Commission_Date DATE NOT NULL,
   Amount INT NOT NULL,
   Sale_Records_ID INT NOT NULL,
   PRIMARY KEY (Commission_ID),
-  FOREIGN KEY (Employee_ID) REFERENCES Employee(Employee_ID),
   FOREIGN KEY (Sale_Records_ID) REFERENCES Sale_Record(Sale_Records_ID)
 );
 
@@ -256,7 +254,7 @@ CREATE TRIGGER Allocate_Commmission
 AFTER INSERT ON Sale_Record FOR EACH ROW
 begin
 	-- Giving Commission to the Employee in the sale
-    INSERT INTO Commission(Commission_ID, Employee_ID, Commission_Date, Amount, Sale_Records_ID) SELECT null,New.Employee_ID, New.Sale_Date, (0.01*New.Sale_Price), New.Sale_Records_ID; 
+    INSERT INTO Commission(Commission_ID, Commission_Date, Amount, Sale_Records_ID) SELECT null, New.Sale_Date, (0.01*New.Sale_Price), New.Sale_Records_ID; 
 END;
 $$
 DELIMITER ;
@@ -362,19 +360,5 @@ CREATE VIEW Empoyee_Commission_Record AS
 -- Trigger 2: When status of the property is changed to Sold, bring the most recent sale record, then commission by taking employee number, 
 -- House Price Update and
 -- Owner of the house changed to buyer: by first copying the buyer details to owner table and put the new Owner ID in Property table.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
