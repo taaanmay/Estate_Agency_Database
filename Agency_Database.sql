@@ -110,6 +110,8 @@ USE Estate_Agency;
 	INSERT INTO Buyer VALUES( 007, 'Kizzy', 'Giles', 480000, '873345684', NULL, NULL);
 	INSERT INTO Buyer VALUES( 008, 'Marry', 'Joeseph', 550000, '873345685', 3, 2);
 
+/* SELECT * FROM Buyer; */
+
 
 	CREATE TABLE IF NOT EXISTS Features
 	(
@@ -125,6 +127,7 @@ USE Estate_Agency;
 	INSERT INTO Features VALUES(004, 'Solar Panel', 'House has Solar Panels');
 	INSERT INTO Features VALUES(005, 'Alarm System', NULL);
 
+/* SELECT * FROM FEATURES; */
 
 	CREATE TABLE IF NOT EXISTS Property
 	(
@@ -156,9 +159,13 @@ USE Estate_Agency;
 	INSERT INTO Property VALUES(005, 'For Sale', '2019-12-01', 675000, '99 Carricmines Manor', 'Carrickmines', 'Dublin 18', 'G26K2P3', 5, 3, NULL, 'House', 004);
 	INSERT INTO Property VALUES(006, 'Sale Agreed', '2020-7-17', 520000, '11 County Ridge', 'Portsmanrock', 'Dublin 5', 'N13H5G9', 3, 2, 115, 'Duplex', 003); 
 	INSERT INTO Property VALUES(007, 'For Sale', '2020-09-21', 430000, '12 Willow Rose', 'Celbridge', 'Kildare', 'M12H4F2', 2, 3, 102, 'Duplex', 001); 
-	INSERT INTO Property VALUES(008, 'Sale Agreed', '2020-04-19', 850000, 'Serena', 'Foxrock', 'Dublin', 'C23L9P1', 5, 4, 201, 'House', 007); 
+	INSERT INTO Property VALUES(008, 'Sale Agreed', '2020-04-19', 850000, 'Serena Estate', 'Foxrock', 'Dublin', 'C23L9P1', 5, 4, 201, 'House', 007); 
 
-
+/* SELECT * FROM Property; */
+/*
+(Prints Property ID, Street, Price, Owner Name)
+SELECT Property.Property_ID, Property.Street, Property.Price, Owner.FName, Owner.SName FROM Property, Owner where Property.Owner_ID = Owner.Owner_ID;
+*/
 	CREATE TABLE IF NOT EXISTS Viewing
 	(
 	  Viewing_ID INT NOT NULL,
@@ -172,9 +179,6 @@ USE Estate_Agency;
 	  FOREIGN KEY (Property_ID) REFERENCES Property(Property_ID),
 	  FOREIGN KEY (Buyer_ID) REFERENCES Buyer(Buyer_ID)
 	);
-/*
-	select property_id, Property.owner_id, Owner.FName, date_updated, Property_Status from Property, Owner where Property_Status = 'Sale Agreed' AND Owner.Owner_ID = Property.Owner_ID;
-  */
   
 	INSERT INTO Viewing VALUES (001,'13:30', '2020-12-15', 001, 002, 001);
     INSERT INTO Viewing VALUES (002,'15:15', '2020-11-17', 001, 002, 002);
@@ -184,6 +188,16 @@ USE Estate_Agency;
     INSERT INTO Viewing VALUES (006,'09:45', '2020-08-08', 006, 005, 005);
     INSERT INTO Viewing VALUES (007,'16:00', '2020-07-12', 004, 006, 001);
     INSERT INTO Viewing VALUES (008,'12:30', '2020-03-30', 001, 008, 003);
+ 
+/* SELECT * FROM Viewing; */
+
+
+ /*
+ (Prints Property ID Owner ID Owner Name and Date Updated for the House whose sale is agreed. Can be used by manager)
+    select property_id, Property.owner_id, Owner.FName, date_updated, Property_Status from Property, Owner where Property_Status = 'Sale Agreed' AND Owner.Owner_ID = Property.Owner_ID;
+ */
+   
+ 
     
 CREATE TABLE Sale_Record
 (
@@ -272,3 +286,14 @@ INSERT INTO Property_Features VALUES(008, 005);
 /*
 select distinct Property.Street, Features.Feat_Name from Property, Features, Property_Features where Features.Feat_Name = 'Parking Space' ;
 */
+
+
+
+/* VIEW CREATED */
+CREATE VIEW Viewing_List AS ( 
+SELECT Viewing.Viewing_ID, Property.Street as Address, Property.Price,  Buyer.FName as Visitor_FName, Buyer.SName as Visitor_SName, 
+Viewing.Viewing_Date as Viewing_Date, Viewing.Viewing_Time,Employee.FName as Employee_FName, Employee.SName as Employee_SName 
+FROM Viewing, Property, Employee, Buyer
+WHERE Viewing.Buyer_ID = Buyer.Buyer_ID AND Viewing.Employee_ID = Employee.Employee_ID AND Viewing.Property_ID = Property.Property_ID);
+
+/* SELECT * FROM Viewing_List  ; */
