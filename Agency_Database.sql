@@ -1,6 +1,11 @@
+Drop Database Agency;
+
+CREATE DATABASE Agency;
+USE Agency;
+
 	/* To do - 
     Add trigger for Sale Record. No entry yet.
-    */
+    
     Drop table Sale_Record;
     Drop table Viewing;
     Drop table Property;
@@ -9,7 +14,7 @@
     Drop table Employee;
     Drop table Branch;
     Drop table Owner;
-    
+    */
 
 	CREATE TABLE IF NOT EXISTS Branch
 	(
@@ -108,15 +113,16 @@
 	(
 	  Feature_ID INT NOT NULL,
 	  Feat_Name  VARCHAR(30) NOT NULL,
-	  Feat_Description VARCHAR(50),
+	  Feat_Description VARCHAR(60),
 	  PRIMARY KEY (Feature_ID)
 	);
 
-	INSERT INTO Features VALUES(001, 'Reverse Camera', 'Reverse Camera present at the back of the car');
-	INSERT INTO Features VALUES(002, 'Heated Seats', 'Car has heated seats at the front');
-	INSERT INTO Features VALUES(003, 'Cruise Mode', NULL);
-	INSERT INTO Features VALUES(004, 'Sun Roof', 'Car has an extended sun roof');
-	INSERT INTO Features VALUES(005, 'Collision Detection', NULL);
+	INSERT INTO Features VALUES(001, 'Central Heating', 'House has a Centralised Heating System');
+	INSERT INTO Features VALUES(002, 'Attic Convertable', 'The attic has provision to convert the attic into a room');
+	INSERT INTO Features VALUES(003, 'Parking Space', NULL);
+	INSERT INTO Features VALUES(004, 'Solar Panel', 'House has Solar Panels');
+	INSERT INTO Features VALUES(005, 'Alarm System', NULL);
+
 
 	CREATE TABLE IF NOT EXISTS Property
 	(
@@ -177,7 +183,7 @@
     INSERT INTO Viewing VALUES (007,'16:00', '2020-07-12', 004, 006, 001);
     INSERT INTO Viewing VALUES (008,'12:30', '2020-03-30', 001, 008, 003);
     
-    CREATE TABLE Sale_Record
+CREATE TABLE Sale_Record
 (
   Sale_Records_ID INT NOT NULL,
   Sale_Date DATE NOT NULL,
@@ -210,46 +216,21 @@
    */  
 
 
+CREATE TABLE Commission
+(
+  Commission_ID INT NOT NULL,
+  Commission_Date DATE NOT NULL,
+  Amount INT NOT NULL,
+  Sale_Records_ID INT NOT NULL,
+  PRIMARY KEY (Commission_ID),
+  FOREIGN KEY (Sale_Records_ID) REFERENCES Sale_Record(Sale_Records_ID)
+);
 
-
-
-
-
-
-
-
-
-	/*
-	Select * from branch;
-	*/
-
-	/*
-	Select * from employee
-	*/
-
-	/*
-	select * from owner
-	*/
-
-	/*
-	select * from buyer
-	*/
-
-	/*
-	select * from Features;
-	*/
-
-	/*
-	select * from Property;
-	*/
-
-/*
-	select * from Viewing;
-*/
-
-/*
-select * from Sale_Record;
-*/
-
-
-
+CREATE TABLE Property_Features
+(
+  Property_ID INT NOT NULL,
+  Feature_ID INT NOT NULL,
+  PRIMARY KEY (Property_ID, Feature_ID),
+  FOREIGN KEY (Property_ID) REFERENCES Property(Property_ID),
+  FOREIGN KEY (Feature_ID) REFERENCES Features(Feature_ID)
+);
