@@ -1,7 +1,7 @@
-Drop Database Agency;
+Drop Database Estate_Agency;
 
-CREATE DATABASE Agency;
-USE Agency;
+CREATE DATABASE Estate_Agency;
+USE Estate_Agency;
 
 	/* To do - 
     Add trigger for Sale Record. No entry yet.
@@ -21,8 +21,8 @@ USE Agency;
 	  Branch_ID INT NOT NULL,
 	  Name CHAR(30) NOT NULL,
 	  Phone_No INT UNIQUE NOT NULL,
-	  Street_ CHAR(20),
-	  Town_ CHAR(20),
+	  Street CHAR(20),
+	  Town CHAR(20),
 	  County CHAR(20),
 	  PRIMARY KEY (Branch_ID),
 	  CONSTRAINT check_Phone_No CHECK ( Phone_No < 10000000000 )
@@ -130,8 +130,8 @@ USE Agency;
 	  Property_Status VARCHAR(20) NOT NULL,
 	  Date_Updated DATE NOT NULL,
 	  Price INT NOT NULL,
-	  Street_ CHAR(50) NOT NULL,
-	  Town_ CHAR(20) NOT NULL,
+	  Street CHAR(50) NOT NULL,
+	  Town CHAR(20) NOT NULL,
 	  County CHAR(20) NOT NULL,
 	  EIRCODE VARCHAR(7) UNIQUE,
 	  Bedroom INT,
@@ -234,3 +234,39 @@ CREATE TABLE Property_Features
   FOREIGN KEY (Property_ID) REFERENCES Property(Property_ID),
   FOREIGN KEY (Feature_ID) REFERENCES Features(Feature_ID)
 );
+
+INSERT INTO Property_Features VALUES(001, 001);
+INSERT INTO Property_Features VALUES(001, 003);
+INSERT INTO Property_Features VALUES(001, 005);
+
+INSERT INTO Property_Features VALUES(002, 001);
+INSERT INTO Property_Features VALUES(002, 002);
+INSERT INTO Property_Features VALUES(002, 003);
+
+INSERT INTO Property_Features VALUES(003, 005);
+
+
+INSERT INTO Property_Features VALUES(004, 003);
+INSERT INTO Property_Features VALUES(004, 005);
+
+INSERT INTO Property_Features VALUES(005, 001);
+INSERT INTO Property_Features VALUES(005, 002);
+INSERT INTO Property_Features VALUES(005, 003);
+INSERT INTO Property_Features VALUES(005, 004);
+INSERT INTO Property_Features VALUES(005, 005);
+
+INSERT INTO Property_Features VALUES(006, 004);
+INSERT INTO Property_Features VALUES(006, 005);
+
+INSERT INTO Property_Features VALUES(007, 001);
+INSERT INTO Property_Features VALUES(007, 003);
+INSERT INTO Property_Features VALUES(007, 005);
+
+INSERT INTO Property_Features VALUES(008, 001);
+INSERT INTO Property_Features VALUES(008, 002);
+INSERT INTO Property_Features VALUES(008, 003);
+INSERT INTO Property_Features VALUES(008, 005);
+
+/*
+select distinct Property.Street, Features.Feat_Name from Property, Features, Property_Features where Features.Feat_Name = 'Parking Space' ;
+*/
