@@ -1,4 +1,4 @@
-Drop Database Estate_Agency;
+Drop Database IF EXISTS Estate_Agency;
 
 CREATE DATABASE Estate_Agency;
 USE Estate_Agency;
@@ -231,44 +231,6 @@ CREATE TABLE Commission
 
 /* SELECT * FROM Commission; */
 
--- 2 TRIGGERS
-DELIMITER $$
-CREATE TRIGGER Update_Property_Details
-AFTER INSERT ON Sale_Record FOR EACH ROW
-begin
-	DECLARE New_Owner varchar(50);
-    -- Creating Buyer into a New Owner
-    INSERT INTO Owner(Owner_ID, FName, SName, Phone_No) select NULL, Buyer.FName, Buyer.SName, Buyer.Phone_No from Buyer where Buyer.Buyer_ID = NEW.Buyer_ID;
-    
-    -- Tagging the new Owner as the Owner of the property
-     Select Max(Owner_ID) from Owner into New_Owner;
-     -- Satus to Sold and Price to Sale Price
-       UPDATE Property 
-     SET Property.Property_Status = 'Sold', Property.Price = New.Sale_Price, Property.Owner_ID = New_Owner, Property.Date_Updated = New.Sale_Date
-    WHERE New.Property_ID = Property.Property_ID; 
-END;
-$$
-DELIMITER ;
-
-DELIMITER $$
-CREATE TRIGGER Allocate_Commmission
-AFTER INSERT ON Sale_Record FOR EACH ROW
-begin
-	-- Giving Commission to the Employee in the sale
-    INSERT INTO Commission(Commission_ID, Commission_Date, Amount, Sale_Records_ID) SELECT null, New.Sale_Date, (0.01*New.Sale_Price), New.Sale_Records_ID; 
-END;
-$$
-DELIMITER ;
-
-
-
-	
-INSERT INTO Sale_Record VALUES(001, '2020-09-24', 485000, 003, 004,006,005, 008);
-INSERT INTO Sale_Record VALUES(002, '2020-07-17', 535000, 002, 006, 001, 004, 003);
-INSERT INTO Sale_Record VALUES(003, '2020-04-19', 845000, 001, 008, 003, 001, 007); 
- 
-
-
 
 CREATE TABLE Property_Features
 (
@@ -310,10 +272,49 @@ select distinct Property.Street, Features.Feat_Name from Property, Features, Pro
 */
 
 
+-- 2 TRIGGERS
+DELIMITER $$
+CREATE TRIGGER Update_Property_Details
+AFTER INSERT ON Sale_Record FOR EACH ROW
+begin
+	DECLARE New_Owner varchar(50);
+    -- Creating Buyer into a New Owner
+    INSERT INTO Owner(Owner_ID, FName, SName, Phone_No) select NULL, Buyer.FName, Buyer.SName, Buyer.Phone_No from Buyer where Buyer.Buyer_ID = NEW.Buyer_ID;
+    
+    -- Tagging the new Owner as the Owner of the property
+     Select Max(Owner_ID) from Owner into New_Owner;
+     -- Satus to Sold and Price to Sale Price
+       UPDATE Property 
+     SET Property.Property_Status = 'Sold', Property.Price = New.Sale_Price, Property.Owner_ID = New_Owner, Property.Date_Updated = New.Sale_Date
+    WHERE New.Property_ID = Property.Property_ID; 
+END;
+$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER Allocate_Commmission
+AFTER INSERT ON Sale_Record FOR EACH ROW
+begin
+	-- Giving Commission to the Employee in the sale
+    INSERT INTO Commission(Commission_ID, Commission_Date, Amount, Sale_Records_ID) SELECT null, New.Sale_Date, (0.01*New.Sale_Price), New.Sale_Records_ID; 
+END;
+$$
+DELIMITER ;
+
+
+-- These Values result into Sale of 3 Houses	
+INSERT INTO Sale_Record VALUES(001, '2020-09-24', 485000, 003, 004,006,005, 008);
+INSERT INTO Sale_Record VALUES(002, '2020-07-17', 535000, 002, 006, 001, 004, 003);
+INSERT INTO Sale_Record VALUES(003, '2020-04-19', 845000, 001, 008, 003, 001, 007); 
+ 
 
 
 
-/* 2 VIEWS CREATED */
+
+
+
+-- SECURITY and VIEWS
+/* 3 VIEWS CREATED */
 CREATE VIEW Viewing_List AS
     (SELECT 
         Viewing.Viewing_ID,
@@ -355,26 +356,34 @@ CREATE VIEW Empoyee_Commission_Record AS
             AND Sale_Record.Employee_ID = Employee.Employee_ID
             AND Sale_Record.Property_ID = Property.Property_ID
             );
-        
- -- SELECT * From Empoyee_Commission_Record;
-
--- Trigger 1: When new insert in Sale_Record, go to Property table and update its status from For Sale to Sale_Agreed.
--- Trigger 2: When status of the property is changed to Sold, bring the most recent sale record, then commission by taking employee number, 
--- House Price Update and
--- Owner of the house changed to buyer: by first copying the buyer details to owner table and put the new Owner ID in Property table.
-
-
-
-
-
-
-
-
-
-
+    
+    
+    
+CREATE VIEW Active_Employee_Database AS
+    SELECT 
+        Employee.Employee_ID,
+        Employee.FName AS Employee_FName,
+        Employee.SName AS Employee_SName,
+        Emp_Position AS Position
+    FROM
+        Employee
+    WHERE
+        Employee.Emp_Status = 'Active';
+ 
+ 
 
 
 
+CREATE ROLE IF NOT EXISTS MANAGER;
+CREATE ROLE IF NOT EXISTS EXECUTIVE;
 
+GRANT ALL ON Empoyee_Commission_Record TO MANAGER WITH GRANT OPTION;
+GRANT ALL ON Viewing_List TO MANAGER WITH GRANT OPTION;
+GRANT ALL ON Active_Employee_Database TO MANAGER WITH GRANT OPTION;
 
+GRANT INSERT, SELECT, UPDATE ON Viewing_List TO EXECUTIVE;
+GRANT SELECT, UPDATE ON Active_Employee_Database TO EXECUTIVE;
 
+-- SELECT * From Viewing_List;
+-- SELECT * From Empoyee_Commission_Record;
+-- SELECT * FROM Active_Employee_Database;
