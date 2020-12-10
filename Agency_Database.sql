@@ -218,6 +218,21 @@ AFTER INSERT ON Sale_Record FOR EACH ROW
 */	
     -- INSERT INTO Owner SELECT (NULL, FName, SName, Phone_No) where Buyer.Buyer_ID = NEW.Buyer_ID;
 
+CREATE TABLE Commission
+(
+  Commission_ID INT NOT NULL AUTO_INCREMENT,
+  Employee_ID INT NOT NULL,
+  Commission_Date DATE NOT NULL,
+  Amount INT NOT NULL,
+  Sale_Records_ID INT NOT NULL,
+  PRIMARY KEY (Commission_ID),
+  FOREIGN KEY (Employee_ID) REFERENCES Employee(Employee_ID),
+  FOREIGN KEY (Sale_Records_ID) REFERENCES Sale_Record(Sale_Records_ID)
+);
+
+/* SELECT * FROM Commission; */
+
+
 DELIMITER $$
 CREATE TRIGGER Update_Property_Details
 AFTER INSERT ON Sale_Record FOR EACH ROW
@@ -225,14 +240,16 @@ begin
 	DECLARE New_Owner varchar(50);
     -- Creating Buyer into a New Owner
     INSERT INTO Owner(Owner_ID, FName, SName, Phone_No) select NULL, Buyer.FName, Buyer.SName, Buyer.Phone_No from Buyer where Buyer.Buyer_ID = NEW.Buyer_ID;
-     
+    
+    -- Tagging the new Owner as the Owner of the property
      Select Max(Owner_ID) from Owner into New_Owner;
      -- Satus to Sold and Price to Sale Price
        UPDATE Property 
-     SET Property.Property_Status = 'Sold', Property.Price = New.Sale_Price, Property.Owner_ID = New_Owner
+     SET Property.Property_Status = 'Sold', Property.Price = New.Sale_Price, Property.Owner_ID = New_Owner, Property.Date_Updated = New.Sale_Date
     WHERE New.Property_ID = Property.Property_ID; 
 	
-	
+	-- Giving Commission to the Employee in the sale
+    INSERT INTO Commission(Commission_ID, Employee_ID, Commission_Date, Amount, Sale_Records_ID) SELECT null,New.Employee_ID, New.Sale_Date, (0.01*New.Sale_Price), New.Sale_Records_ID; 
 END;
 $$
 DELIMITER ;
@@ -241,22 +258,9 @@ DELIMITER ;
 INSERT INTO Sale_Record VALUES(001, '2020-09-24', 485000, 003, 004,006,005, 008);
 INSERT INTO Sale_Record VALUES(002, '2020-07-17', 535000, 002, 006, 001, 004, 003);
 INSERT INTO Sale_Record VALUES(003, '2020-04-19', 845000, 001, 008, 003, 001, 007); 
-
-select * from Property;   
  
+select*from commission;
 
-
-CREATE TABLE Commission
-(
-  Commission_ID INT NOT NULL AUTO_INCREMENT,
-  Commission_Date DATE NOT NULL,
-  Amount INT NOT NULL,
-  Sale_Records_ID INT NOT NULL,
-  PRIMARY KEY (Commission_ID),
-  FOREIGN KEY (Sale_Records_ID) REFERENCES Sale_Record(Sale_Records_ID)
-);
-
-/* SELECT * FROM Commission; */
 
 CREATE TABLE Property_Features
 (
@@ -332,9 +336,3 @@ CREATE VIEW Viewing_List AS
 
 
 -- select * from Property;
-
-
-
-
-
-
