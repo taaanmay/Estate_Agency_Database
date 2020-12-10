@@ -247,19 +247,28 @@ begin
        UPDATE Property 
      SET Property.Property_Status = 'Sold', Property.Price = New.Sale_Price, Property.Owner_ID = New_Owner, Property.Date_Updated = New.Sale_Date
     WHERE New.Property_ID = Property.Property_ID; 
-	
+END;
+$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER Allocate_Commmission
+AFTER INSERT ON Sale_Record FOR EACH ROW
+begin
 	-- Giving Commission to the Employee in the sale
     INSERT INTO Commission(Commission_ID, Employee_ID, Commission_Date, Amount, Sale_Records_ID) SELECT null,New.Employee_ID, New.Sale_Date, (0.01*New.Sale_Price), New.Sale_Records_ID; 
 END;
 $$
 DELIMITER ;
 
+
+
 	
 INSERT INTO Sale_Record VALUES(001, '2020-09-24', 485000, 003, 004,006,005, 008);
 INSERT INTO Sale_Record VALUES(002, '2020-07-17', 535000, 002, 006, 001, 004, 003);
 INSERT INTO Sale_Record VALUES(003, '2020-04-19', 845000, 001, 008, 003, 001, 007); 
  
-select*from commission;
+
 
 
 CREATE TABLE Property_Features
@@ -304,7 +313,7 @@ select distinct Property.Street, Features.Feat_Name from Property, Features, Pro
 
 
 
-/* VIEW CREATED */
+/* 2 VIEWS CREATED */
 CREATE VIEW Viewing_List AS
     (SELECT 
         Viewing.Viewing_ID,
@@ -327,6 +336,28 @@ CREATE VIEW Viewing_List AS
             AND Viewing.Property_ID = Property.Property_ID);
 
 
+CREATE VIEW Empoyee_Commission_Record AS
+    (SELECT 
+        Commission.Commission_ID,
+        Commission.Amount AS Commission_Earned,
+        Employee.FName AS Employee_FName,
+        Employee.SName AS Employee_SName,
+        Property.Street AS Property_Name,
+        Property.Price AS Sale_Price,
+        Sale_Record.Sale_Date
+    FROM
+        Commission,
+        Employee,
+        Property,
+        Sale_Record
+    WHERE
+        Commission.Sale_Records_ID = Sale_Record.Sale_Records_ID
+            AND Sale_Record.Employee_ID = Employee.Employee_ID
+            AND Sale_Record.Property_ID = Property.Property_ID
+            );
+        
+ -- SELECT * From Empoyee_Commission_Record;
+
 -- Trigger 1: When new insert in Sale_Record, go to Property table and update its status from For Sale to Sale_Agreed.
 -- Trigger 2: When status of the property is changed to Sold, bring the most recent sale record, then commission by taking employee number, 
 -- House Price Update and
@@ -335,4 +366,15 @@ CREATE VIEW Viewing_List AS
 
 
 
--- select * from Property;
+
+
+
+
+
+
+
+
+
+
+
+
