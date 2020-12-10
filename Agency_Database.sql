@@ -1,7 +1,8 @@
-
-
-
-	Drop table Viewing;
+	/* To do - 
+    Add trigger for Sale Record. No entry yet.
+    */
+    Drop table Sale_Record;
+    Drop table Viewing;
     Drop table Property;
     Drop table Buyer;
 	Drop table Features;
@@ -174,9 +175,49 @@
     INSERT INTO Viewing VALUES (005,'15:00', '2020-07-19', 007, 003, 004);
     INSERT INTO Viewing VALUES (006,'09:45', '2020-08-08', 006, 005, 005);
     INSERT INTO Viewing VALUES (007,'16:00', '2020-07-12', 004, 006, 001);
-    INSERT INTO Viewing VALUES (008,'12:30', '2020-03-30', 004, 008, 003);
+    INSERT INTO Viewing VALUES (008,'12:30', '2020-03-30', 001, 008, 003);
     
-    	
+    CREATE TABLE Sale_Record
+(
+  Sale_Records_ID INT NOT NULL,
+  Sale_Date DATE NOT NULL,
+  Sale_Price INT NOT NULL,
+  Branch_ID INT NOT NULL,
+  Property_ID INT NOT NULL,
+  Buyer_ID INT NOT NULL,
+  Employee_ID INT NOT NULL,
+  Owner_ID INT NOT NULL,
+  PRIMARY KEY (Sale_Records_ID),
+  FOREIGN KEY (Branch_ID) REFERENCES Branch(Branch_ID),
+  FOREIGN KEY (Property_ID) REFERENCES Property(Property_ID),
+  FOREIGN KEY (Buyer_ID) REFERENCES Buyer(Buyer_ID),
+  FOREIGN KEY (Employee_ID) REFERENCES Employee(Employee_ID),
+  FOREIGN KEY (Owner_ID) REFERENCES Owner(Owner_ID)
+);
+
+/* Add triggeres - 
+1. When new insert in Sale_Record, go to Property table and update its status from For Sale to Sale_Agreed. 
+2. When status of the property is changed to Sold, bring the most recent sale record, then commission by taking employee number, 
+    House Price Update and Owner of the house changed to buyer: by first copying the buyer details to owner table and put the new Owner ID in Property table.
+ */   
+	/*
+	Implement Triggers First  - 
+	
+    INSERT INTO Sale_Record VALUES(001, '2020-09-24', 485000, 003, 004,006,005, 008);
+    INSERT INTO Sale_Record VALUES(002, '2020-07-17', 535000, 002, 006, 001, 004, 003);
+    INSERT INTO Sale_Record VALUES(003, '2020-04-19', 845000, 001, 008, 003, 001, 007); 
+   
+   */  
+
+
+
+
+
+
+
+
+
+
 
 	/*
 	Select * from branch;
@@ -206,8 +247,9 @@
 	select * from Viewing;
 */
 
-
-
+/*
+select * from Sale_Record;
+*/
 
 
 
