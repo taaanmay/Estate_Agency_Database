@@ -34,7 +34,7 @@ USE Estate_Agency;
 	Insert Into Branch Values(003, 'Car Trust Motors', 864222345, 'Naas Rd', 'Naas', 'Wicklow');
 
 
-
+/* SELECT * FROM BRANCH; */
 
 	CREATE TABLE IF NOT EXISTS Employee
 	(
@@ -62,7 +62,7 @@ USE Estate_Agency;
 	INSERT INTO Employee VALUES( 0008, 'Sherlock', 'Holmes', 'Executive', 'Active', 3200, 'K24651323', 003); 
 	INSERT INTO Employee VALUES( 0009, 'Willy', 'Wonka', 'Manager', 'Active', 4200, 'A23451129', 001); 
 
-
+/* SELECT * FROM Employee; */
 
 	CREATE TABLE IF NOT EXISTS Owner
 	(
@@ -70,21 +70,23 @@ USE Estate_Agency;
 	  FName VARCHAR(20) NOT NULL,
 	  SName VARCHAR(20) NOT NULL,
 	  Phone_No INT UNIQUE NOT NULL,
+      Email varchar(50),
 	  PRIMARY KEY (Owner_ID),
-	  CONSTRAINT check_Phone CHECK ( Phone_No < 10000000000 )
+	  CONSTRAINT check_Phone CHECK ( Phone_No < 10000000000 ),
+      CONSTRAINT check_Email CHECK ( Email  LIKE '%_@__%.__%' )
 	);
 
 
-	INSERT INTO Owner VALUES( 001, 'Jude', 'Law', '862345678');
-	INSERT INTO Owner VALUES( 002, 'Zach', 'Jones', '862345679');
-	INSERT INTO Owner VALUES( 003, 'Cody', 'Jones', '862345680');
-	INSERT INTO Owner VALUES( 004, 'Rick', 'Lax', '862345681');
-	INSERT INTO Owner VALUES( 005, 'Rocky', 'Balboa', '892345678');
-	INSERT INTO Owner VALUES( 006, 'Charles', 'Dickens', '892345679');
-	INSERT INTO Owner VALUES( 007, 'Samuel', 'Dempsey', '892345680');
-	INSERT INTO Owner VALUES( 008, 'Andrew', 'Simon', '892345681');
+	INSERT INTO Owner VALUES( 001, 'Jude', 'Law', '862345678',NULL);
+	INSERT INTO Owner VALUES( 002, 'Zach', 'Jones', '862345679','zachj@gmail.com');
+	INSERT INTO Owner VALUES( 003, 'Cody', 'Jones', '862345680',NULL);
+	INSERT INTO Owner VALUES( 004, 'Rick', 'Lax', '862345681',NULL);
+	INSERT INTO Owner VALUES( 005, 'Rocky', 'Balboa', '892345678', 'rockychampion@yahoo.com');
+	INSERT INTO Owner VALUES( 006, 'Charles', 'Dickens', '892345679',NULL);
+	INSERT INTO Owner VALUES( 007, 'Samuel', 'Dempsey', '892345680', 'iamsamuel@gmail.com');
+	INSERT INTO Owner VALUES( 008, 'Andrew', 'Simon', '892345681','simona@yahoo.com');
 
-
+/* SELECT * FROM OWNER; */
 
 	CREATE TABLE IF NOT EXISTS Buyer
 	(
