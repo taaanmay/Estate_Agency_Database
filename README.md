@@ -38,7 +38,7 @@ The Commission table has 4 attributes. This table is used to calculate the commi
 
 The entries in these tables are generated when the Manager adds the sale information of a property in the Sale Record.
 
-<br>
+
 ## Entity Relationship Diagram
 
 ![ERD](assets/erd.png)
@@ -46,7 +46,7 @@ The entries in these tables are generated when the Manager adds the sale informa
 <br><br>
 
 
-<br>
+
 ## Relational Schema Diagram
 
 ![RSD](assets/rsd.png)
