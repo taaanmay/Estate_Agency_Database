@@ -40,12 +40,16 @@ The entries in these tables are generated when the Manager adds the sale informa
 
 <br>
 ## Entity Relationship Diagram
-![ER Diagram](assets/erd.png)
+
+![ERD](assets/erd.png)
+
 <br><br>
 
 
 <br>
 ## Relational Schema Diagram
-![RS Diagram](assets/rsd.png)
+
+![RSD](assets/rsd.png)
+
 <br><br>
 
